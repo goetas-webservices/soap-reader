@@ -1,5 +1,5 @@
 {
-	"name" : "goetas/soap-reader",
+	"name" : "php-webservices/soap-reader",
 	"description" : "SOAP reader",
 	"type" : "library",
 	"authors" : [{
@@ -18,8 +18,8 @@
 	"license" : "MIT",
 	"require" : {
 		"php" : "~5.4",
-		"goetas/wsdl-reader" : "~2.0",
-		"goetas/xsd-reader" : "~2.0"
+		"php-webservices/wsdl-reader" : "~0.1",
+		"php-webservices/xsd-reader" : "~0.1"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "~4.0"
@@ -36,7 +36,7 @@
 	},
 	"extra" : {
 		"branch-alias" : {
-			"dev-master" : "1.0-dev"
+			"dev-master" : "0.1-dev"
 		}
 	}
 }
