@@ -1,6 +1,6 @@
 <?php
 
-namespace Goetas\XML\SOAPReader\Soap;
+namespace PhpWebservices\XML\SOAPReader\Soap;
 
 class HeaderFault extends AbstractHeader {
 }

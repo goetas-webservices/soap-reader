@@ -1,14 +1,14 @@
 <?php
-namespace Goetas\XML\SOAPReader\Soap;
+namespace PhpWebservices\XML\SOAPReader\Soap;
 
-use Goetas\XML\WSDLReader\Wsdl\Binding\Operation as WsdlOperation;
+use PhpWebservices\XML\WSDLReader\Wsdl\Binding\Operation as WsdlOperation;
 
 class Operation
 {
 
     /**
      *
-     * @var \Goetas\XML\WSDLReader\Wsdl\Binding\Operation
+     * @var \PhpWebservices\XML\WSDLReader\Wsdl\Binding\Operation
      */
     protected $operation;
 

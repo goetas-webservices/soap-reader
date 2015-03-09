@@ -1,7 +1,7 @@
 <?php
-namespace Goetas\XML\SOAPReader\Soap;
+namespace PhpWebservices\XML\SOAPReader\Soap;
 
-use Goetas\XML\WSDLReader\Wsdl\PortType;
+use PhpWebservices\XML\WSDLReader\Wsdl\PortType;
 
 class Service
 {
@@ -71,7 +71,7 @@ class Service
     /**
      *
      * @param string $name
-     * @return \Goetas\XML\SOAPReader\Soap\Operation
+     * @return \PhpWebservices\XML\SOAPReader\Soap\Operation
      */
     public function getOperation($name)
     {

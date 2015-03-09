@@ -1,8 +1,8 @@
 <?php
 
-namespace Goetas\XML\SOAPReader\Soap;
+namespace PhpWebservices\XML\SOAPReader\Soap;
 
-use Goetas\XML\WSDLReader\Wsdl\Message\Part;
+use PhpWebservices\XML\WSDLReader\Wsdl\Message\Part;
 
 class Header extends AbstractHeader {
 

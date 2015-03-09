@@ -1,23 +1,23 @@
 <?php
 
-namespace Goetas\XML\SOAPReader;
+namespace PhpWebservices\XML\SOAPReader;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Goetas\XML\WSDLReader\Events\Service\PortEvent;
-use Goetas\XML\SOAPReader\Soap\Service;
-use Goetas\XML\WSDLReader\Events\BindingEvent;
-use Goetas\XML\WSDLReader\Events\Binding\OperationEvent as BindingOperationEvent;
-use Goetas\XML\WSDLReader\Events\Binding\MessageEvent as BindingOperationMessageEvent;
-use Goetas\XML\WSDLReader\Wsdl\Binding;
-use Goetas\XML\SOAPReader\Soap\Operation;
-use Goetas\XML\SOAPReader\Soap\OperationMessage;
-use Goetas\XML\SOAPReader\Soap\Body;
-use Goetas\XML\WSDLReader\Wsdl\Message\Part;
-use Goetas\XML\SOAPReader\Soap\AbstractMessage;
-use Goetas\XML\WSDLReader\Wsdl\Message;
-use Goetas\XML\SOAPReader\Soap\Header;
-use Goetas\XML\SOAPReader\Soap\HeaderFault;
-use Goetas\XML\SOAPReader\Soap\AbstractHeader;
+use PhpWebservices\XML\WSDLReader\Events\Service\PortEvent;
+use PhpWebservices\XML\SOAPReader\Soap\Service;
+use PhpWebservices\XML\WSDLReader\Events\BindingEvent;
+use PhpWebservices\XML\WSDLReader\Events\Binding\OperationEvent as BindingOperationEvent;
+use PhpWebservices\XML\WSDLReader\Events\Binding\MessageEvent as BindingOperationMessageEvent;
+use PhpWebservices\XML\WSDLReader\Wsdl\Binding;
+use PhpWebservices\XML\SOAPReader\Soap\Operation;
+use PhpWebservices\XML\SOAPReader\Soap\OperationMessage;
+use PhpWebservices\XML\SOAPReader\Soap\Body;
+use PhpWebservices\XML\WSDLReader\Wsdl\Message\Part;
+use PhpWebservices\XML\SOAPReader\Soap\AbstractMessage;
+use PhpWebservices\XML\WSDLReader\Wsdl\Message;
+use PhpWebservices\XML\SOAPReader\Soap\Header;
+use PhpWebservices\XML\SOAPReader\Soap\HeaderFault;
+use PhpWebservices\XML\SOAPReader\Soap\AbstractHeader;
 
 class SoapReader implements EventSubscriberInterface {
 	const SOAP_NS = 'http://schemas.xmlsoap.org/wsdl/soap/';

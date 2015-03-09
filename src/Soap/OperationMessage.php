@@ -1,13 +1,13 @@
 <?php
-namespace Goetas\XML\SOAPReader\Soap;
+namespace PhpWebservices\XML\SOAPReader\Soap;
 
-use Goetas\XML\WSDLReader\Wsdl\Binding\OperationMessage as WsdlOperationMessage;
+use PhpWebservices\XML\WSDLReader\Wsdl\Binding\OperationMessage as WsdlOperationMessage;
 
 class OperationMessage
 {
     /**
      *
-     * @var \Goetas\XML\WSDLReader\Wsdl\Binding\OperationMessage
+     * @var \PhpWebservices\XML\WSDLReader\Wsdl\Binding\OperationMessage
      */
     protected $message;
     /**
