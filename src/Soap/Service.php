@@ -10,6 +10,10 @@ class Service
      */
     protected $port;
 
+    /**
+     *
+     * @var string
+     */
     protected $address;
     /**
      *
