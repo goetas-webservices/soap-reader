@@ -1,13 +1,12 @@
 <?php
-namespace PhpWebservices\XML\SOAPReader\Soap;
+namespace GoetasWebservices\XML\SOAPReader\Soap;
 
-use PhpWebservices\XML\WSDLReader\Wsdl\PortType;
-
+use GoetasWebservices\XML\WSDLReader\Wsdl\Service\Port;
 class Service
 {
     /**
      *
-     * @var PortType
+     * @var Port
      */
     protected $port;
 
@@ -22,7 +21,7 @@ class Service
 
     protected $transport;
 
-    public function __construct(PortType $port)
+    public function __construct(Port $port)
     {
         $this->port = $port;
     }
@@ -71,7 +70,7 @@ class Service
     /**
      *
      * @param string $name
-     * @return \PhpWebservices\XML\SOAPReader\Soap\Operation
+     * @return \GoetasWebservices\XML\SOAPReader\Soap\Operation
      */
     public function getOperation($name)
     {

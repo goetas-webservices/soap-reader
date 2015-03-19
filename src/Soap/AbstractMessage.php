@@ -1,7 +1,7 @@
 <?php
-namespace PhpWebservices\XML\SOAPReader\Soap;
+namespace GoetasWebservices\XML\SOAPReader\Soap;
 
-use PhpWebservices\XML\WSDLReader\Wsdl\Message\Part;
+use GoetasWebservices\XML\WSDLReader\Wsdl\Message\Part;
 
 abstract class AbstractMessage
 {

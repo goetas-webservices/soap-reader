@@ -1,14 +1,14 @@
 <?php
-namespace PhpWebservices\XML\SOAPReader\Soap;
+namespace GoetasWebservices\XML\SOAPReader\Soap;
 
-use PhpWebservices\XML\WSDLReader\Wsdl\Binding\Operation as WsdlOperation;
+use GoetasWebservices\XML\WSDLReader\Wsdl\Binding\Operation as WsdlOperation;
 
 class Operation
 {
 
     /**
      *
-     * @var \PhpWebservices\XML\WSDLReader\Wsdl\Binding\Operation
+     * @var \GoetasWebservices\XML\WSDLReader\Wsdl\Binding\Operation
      */
     protected $operation;
 
@@ -75,7 +75,10 @@ class Operation
         $this->style = $style;
         return $this;
     }
-
+	/**
+	 *
+	 * @return \GoetasWebservices\XML\SOAPReader\Soap\OperationMessage
+	 */
     public function getInput()
     {
         return $this->input;
@@ -87,6 +90,10 @@ class Operation
         return $this;
     }
 
+    /**
+     *
+     * @return \GoetasWebservices\XML\SOAPReader\Soap\OperationMessage
+     */
     public function getOutput()
     {
         return $this->output;
@@ -100,11 +107,12 @@ class Operation
 
     public function getFaults()
     {
-        return $this->fault;
+        return $this->faults;
     }
 
     public function addFault(Fault $fault)
     {
-    	$this->faults[] = $fault;
+    	$this->faults[$fault->getName()] = $fault;
+    	return $this;
     }
 }

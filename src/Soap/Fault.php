@@ -1,7 +1,7 @@
 <?php
-namespace PhpWebservices\XML\SOAPReader\Soap;
+namespace GoetasWebservices\XML\SOAPReader\Soap;
 
-use PhpWebservices\XML\WSDLReader\Wsdl\Message\Part;
+use GoetasWebservices\XML\WSDLReader\Wsdl\PortType\Fault as WsdlFault;
 
 class Fault extends Body
 {
@@ -10,6 +10,19 @@ class Fault extends Body
      * @var string
      */
     protected $name;
+
+    /**
+     *
+     * @var WsdlFault
+     */
+    protected $fault;
+
+
+    public function __construct(WsdlFault $fault)
+    {
+		$this->fault = $fault;
+    }
+
 	public function getName() {
 		return $this->name;
 	}
@@ -18,5 +31,12 @@ class Fault extends Body
 		return $this;
 	}
 
+	/**
+	 * @return \GoetasWebservices\XML\WSDLReader\Wsdl\PortType\Fault
+	 */
+	public function getFault()
+	{
+		return $this->fault;
+	}
 
 }
