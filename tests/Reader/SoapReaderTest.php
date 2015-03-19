@@ -6,7 +6,15 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use GoetasWebservices\XML\SOAPReader\SoapReader;
 class SoapReaderTest extends \PHPUnit_Framework_TestCase
 {
+	/**
+	 *
+	 * @var DefinitionsReader
+	 */
     protected $wsdl;
+    /**
+     *
+     * @var SoapReader
+     */
     protected $soap;
 	public function setUp()
 	{
@@ -49,7 +57,6 @@ class SoapReaderTest extends \PHPUnit_Framework_TestCase
 		$this->assertCount(1, $bodyParts);
 		$this->assertInstanceOf('GoetasWebservices\XML\WSDLReader\Wsdl\Message\Part', $bodyParts['requestParams']);
 		$this->assertEquals('run', $bodyParts['requestParams']->getElement()->getName());
-
 
 		$output = $soapOperation->getOutput();
 
