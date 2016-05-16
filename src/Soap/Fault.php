@@ -20,23 +20,26 @@ class Fault extends Body
 
     public function __construct(WsdlFault $fault)
     {
-		$this->fault = $fault;
+        $this->fault = $fault;
     }
 
-	public function getName() {
-		return $this->name;
-	}
-	public function setName($name) {
-		$this->name = $name;
-		return $this;
-	}
+    public function getName()
+    {
+        return $this->name;
+    }
 
-	/**
-	 * @return \GoetasWebservices\XML\WSDLReader\Wsdl\PortType\Fault
-	 */
-	public function getFault()
-	{
-		return $this->fault;
-	}
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return \GoetasWebservices\XML\WSDLReader\Wsdl\PortType\Fault
+     */
+    public function getFault()
+    {
+        return $this->fault;
+    }
 
 }

@@ -48,17 +48,19 @@ class OperationMessage
     {
         return $this->headers;
     }
+
     public function getHeaderFaults()
     {
         return $this->headerFaults;
     }
 
-	public function addHeader(Header $header)
-	{
-		$this->headers[]=$header;
-	}
-	public function addHeaderFault(HeaderFault $header)
-	{
-		$this->headerFaults[]=$header;
-	}
+    public function addHeader(Header $header)
+    {
+        $this->headers[] = $header;
+    }
+
+    public function addHeaderFault(HeaderFault $header)
+    {
+        $this->headerFaults[] = $header;
+    }
 }

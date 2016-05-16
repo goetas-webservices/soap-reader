@@ -32,26 +32,37 @@ abstract class AbstractMessage
      */
     protected $encoding = array();
 
-    public function getUse() {
-    	return $this->use;
+    public function getUse()
+    {
+        return $this->use;
     }
-    public function setUse($use) {
-    	$this->use = $use;
-    	return $this;
+
+    public function setUse($use)
+    {
+        $this->use = $use;
+        return $this;
     }
-    public function getNamespace() {
-    	return $this->namespace;
+
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
-    public function setNamespace($namespace) {
-    	$this->namespace = $namespace;
-    	return $this;
+
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+        return $this;
     }
-    public function getEncoding() {
-    	return $this->encoding;
+
+    public function getEncoding()
+    {
+        return $this->encoding;
     }
-    public function setEncoding($encoding) {
-    	$this->encoding = $encoding;
-    	return $this;
+
+    public function setEncoding($encoding)
+    {
+        $this->encoding = $encoding;
+        return $this;
     }
 
 

@@ -1,91 +1,93 @@
 <?php
 namespace GoetasWebservices\XML\SOAPReader\Tests;
 
+use GoetasWebservices\XML\SOAPReader\SoapReader;
 use GoetasWebservices\XML\WSDLReader\DefinitionsReader;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use GoetasWebservices\XML\SOAPReader\SoapReader;
+
 class SoapReaderTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 *
-	 * @var DefinitionsReader
-	 */
+    /**
+     *
+     * @var DefinitionsReader
+     */
     protected $wsdl;
     /**
      *
      * @var SoapReader
      */
     protected $soap;
-	public function setUp()
-	{
-		$dispatcher = new EventDispatcher();
-		$this->wsdl = new DefinitionsReader(null, $dispatcher);
 
-		$this->soap = new SoapReader();
-		$dispatcher->addSubscriber($this->soap);
-	}
+    public function setUp()
+    {
+        $dispatcher = new EventDispatcher();
+        $this->wsdl = new DefinitionsReader(null, $dispatcher);
 
-	public function testSimple()
-	{
-		$definitions = $this->wsdl->readFile(__DIR__ . '/res/easy.wsdl');
+        $this->soap = new SoapReader();
+        $dispatcher->addSubscriber($this->soap);
+    }
 
-		$service = $definitions->getService('easy');
-		$port = $service->getPort('easySOAP');
+    public function testSimple()
+    {
+        $definitions = $this->wsdl->readFile(__DIR__ . '/res/easy.wsdl');
 
-		$soapService = $this->soap->getSoapServiceByPort($port);
+        $service = $definitions->getService('easy');
+        $port = $service->getPort('easySOAP');
 
-		$this->assertEquals('http://www.example.org/location', $soapService->getAddress());
-		$this->assertEquals('document', $soapService->getStyle());
-		$this->assertEquals('http://schemas.xmlsoap.org/soap/http', $soapService->getTransport());
+        $soapService = $this->soap->getSoapServiceByPort($port);
 
-		$this->assertArrayHasKey('run', $soapService->getOperations());
+        $this->assertEquals('http://www.example.org/location', $soapService->getAddress());
+        $this->assertEquals('document', $soapService->getStyle());
+        $this->assertEquals('http://schemas.xmlsoap.org/soap/http', $soapService->getTransport());
 
-		$soapOperation = $soapService->getOperations()['run'];
-		$this->assertEquals('http://www.example.org/run', $soapOperation->getAction());
-		$this->assertEquals('document', $soapOperation->getStyle());
+        $this->assertArrayHasKey('run', $soapService->getOperations());
 
-		$this->assertInstanceOf('GoetasWebservices\XML\WSDLReader\Wsdl\Binding\Operation', $soapOperation->getOperation());
+        $soapOperation = $soapService->getOperations()['run'];
+        $this->assertEquals('http://www.example.org/run', $soapOperation->getAction());
+        $this->assertEquals('document', $soapOperation->getStyle());
 
-		$input = $soapOperation->getInput();
-		$body = $input->getBody();
+        $this->assertInstanceOf('GoetasWebservices\XML\WSDLReader\Wsdl\Binding\Operation', $soapOperation->getOperation());
 
-		$this->assertEquals([], $body->getEncoding());
-		$this->assertEquals('literal', $body->getUse());
-		$this->assertEquals('', $body->getNamespace());
+        $input = $soapOperation->getInput();
+        $body = $input->getBody();
 
-		$bodyParts = $body->getParts();
-		$this->assertCount(1, $bodyParts);
-		$this->assertInstanceOf('GoetasWebservices\XML\WSDLReader\Wsdl\Message\Part', $bodyParts['requestParams']);
-		$this->assertEquals('run', $bodyParts['requestParams']->getElement()->getName());
+        $this->assertEquals([], $body->getEncoding());
+        $this->assertEquals('literal', $body->getUse());
+        $this->assertEquals('', $body->getNamespace());
 
-		$output = $soapOperation->getOutput();
+        $bodyParts = $body->getParts();
+        $this->assertCount(1, $bodyParts);
+        $this->assertInstanceOf('GoetasWebservices\XML\WSDLReader\Wsdl\Message\Part', $bodyParts['requestParams']);
+        $this->assertEquals('run', $bodyParts['requestParams']->getElement()->getName());
 
-		$body = $output->getBody();
+        $output = $soapOperation->getOutput();
 
-		$this->assertEquals([], $body->getEncoding());
-		$this->assertEquals('literal', $body->getUse());
-		$this->assertEquals('', $body->getNamespace());
+        $body = $output->getBody();
 
-		$bodyParts = $body->getParts();
-		$this->assertCount(1, $bodyParts);
-		$this->assertInstanceOf('GoetasWebservices\XML\WSDLReader\Wsdl\Message\Part', $bodyParts['responseParams']);
-		$this->assertEquals('runResponse', $bodyParts['responseParams']->getElement()->getName());
+        $this->assertEquals([], $body->getEncoding());
+        $this->assertEquals('literal', $body->getUse());
+        $this->assertEquals('', $body->getNamespace());
 
-		$faults = $soapOperation->getFaults();
+        $bodyParts = $body->getParts();
+        $this->assertCount(1, $bodyParts);
+        $this->assertInstanceOf('GoetasWebservices\XML\WSDLReader\Wsdl\Message\Part', $bodyParts['responseParams']);
+        $this->assertEquals('runResponse', $bodyParts['responseParams']->getElement()->getName());
 
-		$this->assertCount(2, $faults);
-		$this->assertArrayHasKey('f1', $faults);
-		$this->assertArrayHasKey('f2', $faults);
+        $faults = $soapOperation->getFaults();
 
-		$headers = $soapOperation->getOutput()->getHeaders();
+        $this->assertCount(2, $faults);
+        $this->assertArrayHasKey('f1', $faults);
+        $this->assertArrayHasKey('f2', $faults);
 
-		$this->assertCount(1, $headers);
-		$this->assertInstanceOf('GoetasWebservices\XML\SOAPReader\Soap\Header', $headers[0]);
+        $headers = $soapOperation->getOutput()->getHeaders();
 
-		$this->assertCount(1, $headers[0]->getFaults());
+        $this->assertCount(1, $headers);
+        $this->assertInstanceOf('GoetasWebservices\XML\SOAPReader\Soap\Header', $headers[0]);
 
-		$this->assertInstanceOf('GoetasWebservices\XML\SOAPReader\Soap\HeaderFault', $headers[0]->getFaults()[0]);
-	}
+        $this->assertCount(1, $headers[0]->getFaults());
+
+        $this->assertInstanceOf('GoetasWebservices\XML\SOAPReader\Soap\HeaderFault', $headers[0]->getFaults()[0]);
+    }
 
 }
 

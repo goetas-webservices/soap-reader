@@ -2,6 +2,7 @@
 namespace GoetasWebservices\XML\SOAPReader\Soap;
 
 use GoetasWebservices\XML\WSDLReader\Wsdl\Service\Port;
+
 class Service
 {
     /**
@@ -29,6 +30,7 @@ class Service
     {
         $this->port = $port;
     }
+
     public function getPort()
     {
         return $this->port;
@@ -71,6 +73,7 @@ class Service
         $this->transport = $transport;
         return $this;
     }
+
     /**
      *
      * @param string $name
@@ -83,7 +86,19 @@ class Service
 
     public function addOperation(Operation $operation)
     {
-        $this->operations[$operation->getOperation()->getName()]=$operation;
+        $this->operations[$operation->getOperation()->getName()] = $operation;
     }
 
+    /**
+     * @param $action
+     * @return \GoetasWebservices\XML\SOAPReader\Soap\Operation|null
+     */
+    public function findByAction($action)
+    {
+        foreach ($this->operations as $operation) {
+            if ($operation->getAction() === $action) {
+                return $operation;
+            }
+        }
+    }
 }

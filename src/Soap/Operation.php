@@ -75,10 +75,11 @@ class Operation
         $this->style = $style;
         return $this;
     }
-	/**
-	 *
-	 * @return \GoetasWebservices\XML\SOAPReader\Soap\OperationMessage
-	 */
+
+    /**
+     *
+     * @return \GoetasWebservices\XML\SOAPReader\Soap\OperationMessage
+     */
     public function getInput()
     {
         return $this->input;
@@ -112,7 +113,7 @@ class Operation
 
     public function addFault(Fault $fault)
     {
-    	$this->faults[$fault->getName()] = $fault;
-    	return $this;
+        $this->faults[$fault->getName()] = $fault;
+        return $this;
     }
 }

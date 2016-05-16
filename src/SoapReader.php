@@ -33,7 +33,7 @@ class SoapReader implements EventSubscriberInterface
             'service.port' => 'onServicePort',
             'binding' => 'onBinding',
             'binding.operation' => 'onBindingOperation',
-            'binding.operation.message' => 'onBindingOperationMessge',
+            'binding.operation.message' => 'onBindingOperationMessage',
             'binding.operation.fault' => 'onBindingOperationFault'
         ];
     }
@@ -90,7 +90,7 @@ class SoapReader implements EventSubscriberInterface
 
     /**
      *
-     * @param Binding $binging
+     * @param Port $port
      * @return Service
      */
     public function getSoapServiceByPort(Port $port)
@@ -99,19 +99,23 @@ class SoapReader implements EventSubscriberInterface
     }
 
     /**
+     * @return Service[]
+     */
+    public function getSoapServices()
+    {
+        return array_values($this->servicesByPort);
+    }
+
+    /**
      *
      * @var Operation[]
      */
     protected $operations = [];
 
+
     public function onBindingOperation(BindingOperationEvent $event)
     {
-        $service = $this->getSoapServiceByBinding($event->getOperation()
-            ->getBinding());
-
         $operation = new Operation($event->getOperation());
-
-        $this->operations [spl_object_hash($event->getOperation())] = $operation;
 
         if ($message = $event->getOperation()->getInput()) {
             $operation->setInput(new OperationMessage($message));
@@ -119,9 +123,10 @@ class SoapReader implements EventSubscriberInterface
         if ($message = $event->getOperation()->getOutput()) {
             $operation->setOutput(new OperationMessage($message));
         }
-
+        $skip = true;
         foreach ($event->getNode()->childNodes as $node) {
             if ($node->namespaceURI == self::SOAP_NS && $node->localName == 'operation') {
+                $skip = false;
                 if ($node->getAttribute("soapAction")) {
                     $operation->setAction($node->getAttribute("soapAction"));
                 }
@@ -131,53 +136,74 @@ class SoapReader implements EventSubscriberInterface
             }
         }
 
-        $service->addOperation($operation);
+        $service = $this->getSoapServiceByBinding($event->getOperation()
+            ->getBinding());
+
+
+        if ($service && !$skip) {
+            $this->operations [spl_object_hash($event->getOperation())] = $operation;
+            $service->addOperation($operation);
+        }
     }
 
-    public function onBindingOperationMessge(BindingOperationMessageEvent $event)
+    public function onBindingOperationMessage(BindingOperationMessageEvent $event)
     {
-        foreach (['Input', 'Output'] as $where) {
+        $operationMessage = $event->getOperationMessage();
+        $operation = $operationMessage->getOperation();
 
-            $operation = $event->getOperationMessage()->getOperation();
-            $oMessage = new OperationMessage($event->getOperationMessage());
+        if (!isset($this->operations[spl_object_hash($operation)])) { // non soap 1.0 operation?
+            return;
+        }
 
-            $soapOperation = $this->operations [spl_object_hash($operation)];
-            $soapOperation->{"set" . $where}($oMessage);
+        $soapOperation = $this->operations[spl_object_hash($operation)];
 
-            $typeOperation = $operation->getBinding()
-                ->getType()
-                ->getOperation($operation->getName());
-            $message = $typeOperation->{"get" . $where}()->getMessage();
-            if (!$message) {
+        $typeOperation = $operation->getBinding()
+            ->getType()
+            ->getOperation($operation->getName());
+
+        $where = ucfirst($event->getType());
+
+        $oMessage = new OperationMessage($operationMessage);
+
+
+        $soapOperation->{"set" . $where}($oMessage);
+
+        /**
+         * @var $message \GoetasWebservices\XML\WSDLReader\Wsdl\Message
+         */
+        $message = $typeOperation->{"get" . $where}()->getMessage();
+
+        if (!$message) {
+            return;
+        }
+
+        foreach ($event->getNode()->childNodes as $node) {
+            if ($node->namespaceURI !== self::SOAP_NS) {
                 continue;
             }
-            foreach ($event->getNode()->childNodes as $node) {
-                if ($node->namespaceURI !== self::SOAP_NS) {
-                    continue;
-                }
-                if ($node->localName == 'body') {
-                    $body = new Body();
-                    $this->fillBody($body, $message, $node);
-                    $oMessage->setBody($body);
-                }
-                if ($node->localName == 'header') {
-                    list ($name, $ns) = DefinitionsReader::splitParts($node, $node->getAttribute("message"));
-                    $hMessage = $event->getOperationMessage()->getDefinition()->findMessage($name, $ns);
-                    $header = new Header();
-                    $this->fillHeader($header, $hMessage, $node);
-                    $oMessage->addHeader($header);
-                }
-                /*
-                if ($node->localName == 'headerfalt') {
-                    list ($name, $ns) = DefinitionsReader::splitParts($node, $node->getAttribute("message"));
-                    $hMessage = $event->getOperationMessage()->getDefinition()->findMessage($name, $ns);
 
-                    $header = new HeaderFault();
-                    $this->fillAbstractHeader($header, $message, $node);
-                    $oMessage->addHeaderFault($header);
-                }
-                */
+            if ($node->localName == 'body') {
+                $body = new Body();
+                $this->fillBody($body, $message, $node);
+                $oMessage->setBody($body);
             }
+            if ($node->localName == 'header') {
+                list ($name, $ns) = DefinitionsReader::splitParts($node, $node->getAttribute("message"));
+                $hMessage = $event->getOperationMessage()->getDefinition()->findMessage($name, $ns);
+                $header = new Header();
+                $this->fillHeader($header, $hMessage, $node);
+                $oMessage->addHeader($header);
+            }
+            /*
+            if ($node->localName == 'headerfalt') {
+                list ($name, $ns) = DefinitionsReader::splitParts($node, $node->getAttribute("message"));
+                $hMessage = $event->getOperationMessage()->getDefinition()->findMessage($name, $ns);
+
+                $header = new HeaderFault();
+                $this->fillAbstractHeader($header, $message, $node);
+                $oMessage->addHeaderFault($header);
+            }
+            */
         }
     }
 

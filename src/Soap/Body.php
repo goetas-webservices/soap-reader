@@ -15,12 +15,18 @@ class Body extends AbstractMessage
      */
     protected $parts = array();
 
-	public function getParts() {
-		return $this->parts;
-	}
-	public function setParts($parts) {
-		$this->parts = $parts;
-		return $this;
-	}
+    /**
+     * @return \GoetasWebservices\XML\WSDLReader\Wsdl\Message\Part[]
+     */
+    public function getParts()
+    {
+        return $this->parts;
+    }
+
+    public function setParts($parts)
+    {
+        $this->parts = $parts;
+        return $this;
+    }
 
 }

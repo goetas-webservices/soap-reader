@@ -2,5 +2,6 @@
 
 namespace GoetasWebservices\XML\SOAPReader\Soap;
 
-class HeaderFault extends AbstractHeader {
+class HeaderFault extends AbstractHeader
+{
 }
