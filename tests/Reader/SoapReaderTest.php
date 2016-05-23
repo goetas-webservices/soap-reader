@@ -34,7 +34,7 @@ class SoapReaderTest extends \PHPUnit_Framework_TestCase
         $service = $definitions->getService('easy');
         $port = $service->getPort('easySOAP');
 
-        $soapService = $this->soap->getSoapServiceByPort($port);
+        $soapService = $this->soap->getServiceByPort($port);
 
         $this->assertEquals('http://www.example.org/location', $soapService->getAddress());
         $this->assertEquals('document', $soapService->getStyle());
