@@ -66,7 +66,7 @@ class SoapReader implements EventSubscriberInterface
 
     public function onBinding(BindingEvent $event)
     {
-        $service = $this->getSoapServiceByBinding($event->getBinding());
+        $service = $this->getServiceByBinding($event->getBinding());
 
         foreach ($event->getNode()->childNodes as $node) {
             if ($node->namespaceURI == self::SOAP_NS && $node->localName == 'binding') {
@@ -83,7 +83,7 @@ class SoapReader implements EventSubscriberInterface
      * @param Binding $binging
      * @return Service
      */
-    protected function getSoapServiceByBinding(Binding $binging)
+    protected function getServiceByBinding(Binding $binging)
     {
         return $this->servicesByBinding [spl_object_hash($binging)];
     }
@@ -93,7 +93,7 @@ class SoapReader implements EventSubscriberInterface
      * @param Port $port
      * @return Service
      */
-    public function getSoapServiceByPort(Port $port)
+    public function getServiceByPort(Port $port)
     {
         return $this->servicesByPort [spl_object_hash($port)];
     }
@@ -101,7 +101,7 @@ class SoapReader implements EventSubscriberInterface
     /**
      * @return Service[]
      */
-    public function getSoapServices()
+    public function getServices()
     {
         return array_values($this->servicesByPort);
     }
@@ -136,7 +136,7 @@ class SoapReader implements EventSubscriberInterface
             }
         }
 
-        $service = $this->getSoapServiceByBinding($event->getOperation()
+        $service = $this->getServiceByBinding($event->getOperation()
             ->getBinding());
 
 
