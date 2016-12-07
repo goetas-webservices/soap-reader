@@ -5,7 +5,6 @@ use GoetasWebservices\XML\WSDLReader\Wsdl\Binding\Operation as WsdlOperation;
 
 class Operation
 {
-
     /**
      *
      * @var \GoetasWebservices\XML\WSDLReader\Wsdl\Binding\Operation
@@ -18,6 +17,12 @@ class Operation
      * @var string
      */
     protected $action;
+
+    /**
+     * @var boolean
+     */
+    protected $actionRequired = false;
+
     /**
      * "rpc|document" - Provides a message style for this operation.
      * This is an optional attribute.
@@ -57,6 +62,22 @@ class Operation
     public function getAction()
     {
         return $this->action;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActionRequired()
+    {
+        return $this->actionRequired;
+    }
+
+    /**
+     * @param boolean $actionRequired
+     */
+    public function setActionRequired($actionRequired)
+    {
+        $this->actionRequired = (bool)$actionRequired;
     }
 
     public function setAction($action)

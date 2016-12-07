@@ -26,6 +26,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SoapReader implements EventSubscriberInterface
 {
     const SOAP_NS = 'http://schemas.xmlsoap.org/wsdl/soap/';
+    const SOAP12_NS = 'http://schemas.xmlsoap.org/wsdl/soap12/';
+
 
     public static function getSubscribedEvents()
     {
@@ -55,8 +57,11 @@ class SoapReader implements EventSubscriberInterface
         $service = new Service($event->getPort());
 
         foreach ($event->getNode()->childNodes as $node) {
-            if ($node->namespaceURI == self::SOAP_NS) {
+            if ($node->namespaceURI == self::SOAP_NS || $node->namespaceURI == self::SOAP12_NS) {
                 $service->setAddress($node->getAttribute("location"));
+            }
+            if ($node->namespaceURI == self::SOAP12_NS) {
+                $service->setVersion('1.2');
             }
         }
 
@@ -69,7 +74,7 @@ class SoapReader implements EventSubscriberInterface
         $service = $this->getServiceByBinding($event->getBinding());
 
         foreach ($event->getNode()->childNodes as $node) {
-            if ($node->namespaceURI == self::SOAP_NS && $node->localName == 'binding') {
+            if (($node->namespaceURI == self::SOAP12_NS || $node->namespaceURI == self::SOAP_NS) && $node->localName == 'binding') {
                 $service->setTransport($node->getAttribute("transport"));
                 if ($node->getAttribute("style")) {
                     $service->setStyle($node->getAttribute("style"));
@@ -125,14 +130,18 @@ class SoapReader implements EventSubscriberInterface
         }
         $skip = true;
         foreach ($event->getNode()->childNodes as $node) {
-            if ($node->namespaceURI == self::SOAP_NS && $node->localName == 'operation') {
+            if (($node->namespaceURI == self::SOAP_NS || $node->namespaceURI == self::SOAP12_NS) && $node->localName == 'operation') {
                 $skip = false;
                 if ($node->getAttribute("soapAction")) {
                     $operation->setAction($node->getAttribute("soapAction"));
                 }
+                if ($node->namespaceURI == self::SOAP12_NS && $node->getAttribute("soapActionRequired")) {
+                    $operation->setActionRequired($node->getAttribute("soapActionRequired") === 'true' || $node->getAttribute("soapActionRequired") === '1');
+                }
                 if ($node->getAttribute("style")) {
                     $operation->setStyle($node->getAttribute("style"));
                 }
+
             }
         }
 
@@ -178,7 +187,7 @@ class SoapReader implements EventSubscriberInterface
         }
 
         foreach ($event->getNode()->childNodes as $node) {
-            if ($node->namespaceURI !== self::SOAP_NS) {
+            if ($node->namespaceURI !== self::SOAP_NS && ($node->namespaceURI !== self::SOAP12_NS)) {
                 continue;
             }
 
@@ -220,7 +229,7 @@ class SoapReader implements EventSubscriberInterface
 
 
         foreach ($event->getNode()->childNodes as $node) {
-            if ($node->namespaceURI !== self::SOAP_NS) {
+            if ($node->namespaceURI !== self::SOAP_NS && $node->namespaceURI !== self::SOAP12_NS) {
                 continue;
             }
             if ($node->localName == 'fault') {
@@ -270,7 +279,7 @@ class SoapReader implements EventSubscriberInterface
     {
         $this->fillAbstractHeader($header, $message, $node);
         foreach ($node->childNodes as $childNode) {
-            if ($childNode->namespaceURI == self::SOAP_NS && $childNode->localName == 'headerfault') {
+            if (($childNode->namespaceURI == self::SOAP_NS || $node->namespaceURI == self::SOAP12_NS) && $childNode->localName == 'headerfault') {
 
                 list ($name, $ns) = DefinitionsReader::splitParts($node, $node->getAttribute("message"));
                 $hMessage = $message->getDefinition()->findMessage($name, $ns);

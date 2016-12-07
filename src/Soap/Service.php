@@ -5,6 +5,12 @@ use GoetasWebservices\XML\WSDLReader\Wsdl\Service\Port;
 
 class Service
 {
+
+    /**
+     * @var string
+     */
+    protected $version = '1.1';
+
     /**
      *
      * @var Port
@@ -100,5 +106,21 @@ class Service
                 return $operation;
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param string $version
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
     }
 }
