@@ -3,9 +3,10 @@ namespace GoetasWebservices\XML\SOAPReader\Tests;
 
 use GoetasWebservices\XML\SOAPReader\SoapReader;
 use GoetasWebservices\XML\WSDLReader\DefinitionsReader;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class SoapReaderTest extends \PHPUnit_Framework_TestCase
+class SoapReaderTest extends TestCase
 {
     /**
      *
@@ -18,7 +19,7 @@ class SoapReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $soap;
 
-    public function setUp()
+    public function setUp(): void
     {
         $dispatcher = new EventDispatcher();
         $this->wsdl = new DefinitionsReader(null, $dispatcher);
