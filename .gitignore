@@ -4,3 +4,4 @@
 /.buildpath
 composer.lock
 .idea
+/.phpunit.result.cache
