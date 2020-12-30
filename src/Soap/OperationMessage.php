@@ -43,12 +43,18 @@ class OperationMessage
     {
         $this->body = $body;
     }
-
+    
+    /**
+     * @return Header[]
+     */
     public function getHeaders()
     {
         return $this->headers;
     }
 
+    /**
+     * @return HeaderFault[]
+     */
     public function getHeaderFaults()
     {
         return $this->headerFaults;
